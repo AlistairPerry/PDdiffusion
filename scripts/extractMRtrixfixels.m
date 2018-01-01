@@ -1,4 +1,4 @@
-function [allsubjfixels] = extractMRtrixfixels(fodtemplatebase)
+function [allsubjfixels] = extractMRtrixfixels(fodtemplatebase, outdir)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -19,6 +19,8 @@ indfixelrow=find(strcmp({subjfixelfiles.name}, 'index.mif')==1);
 
 catremrows=cat(1,dirfixelrow,indfixelrow);
 subjfixelfiles(catremrows,:)=[];
+
+mkdir(outdir);
 
 for i = 1:length(subjfixelfiles(:,1))
     
@@ -41,7 +43,7 @@ for i = 1:length(subjfixelfiles(:,1))
     
     fixeltype=basename(workingdirectory);
     outfixelname=[currentsubj '_' fixeltype '.nii'];
-    save_untouch_nii(subjoutfixelnii, outfixelname);
+    save_untouch_nii(subjoutfixelnii, [outdir '/' outfixelname]);
     
 end
 
