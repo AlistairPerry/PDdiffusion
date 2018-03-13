@@ -6,7 +6,7 @@ subj=$1
 WORKDIR=$2
 NORMDIR=$3
 PARCDIR=$4
-parcimageref=5
+parcimageref=$5
 indivparcdir=$6
 seedtracklist=$7
 
