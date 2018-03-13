@@ -15,21 +15,21 @@ cd ${OUTDIR}
 
 #SMA – includes 6ma (44), 6mp(55)
 
-mrcat ${subjMaskDir}/L_6ma_ROI.nii.gz ${subjMaskDir}/L_6mp_ROI.nii.gz ${OUTDIR}/HCP_LSMA_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/L_6ma_ROI.nii.gz ${subjMaskDir}/L_6mp_ROI.nii.gz -max ${OUTDIR}/HCP_LSMA_FS.nii -force -nthreads $ncpus
  
-mrcat ${subjMaskDir}/R_6mp_ROI.nii.gz ${subjMaskDir}/R_6mp_ROI.nii.gz ${OUTDIR}/HCP_RSMA_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/R_6mp_ROI.nii.gz ${subjMaskDir}/R_6mp_ROI.nii.gz -max ${OUTDIR}/HCP_RSMA_FS.nii -force -nthreads $ncpus
 
 
 #10medial – includes 10r (65), 10v (88)
 
-mrcat ${subjMaskDir}/L_10r_ROI.nii.gz ${subjMaskDir}/L_10v_ROI.nii.gz ${OUTDIR}/HCP_L10m_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/L_10r_ROI.nii.gz ${subjMaskDir}/L_10v_ROI.nii.gz -max ${OUTDIR}/HCP_L10m_FS.nii -force -nthreads $ncpus
 
-mrcat ${subjMaskDir}/R_10r_ROI.nii.gz ${subjMaskDir}/R_10v_ROI.nii.gz ${OUTDIR}/HCP_R10m_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/R_10r_ROI.nii.gz ${subjMaskDir}/R_10v_ROI.nii.gz -max ${OUTDIR}/HCP_R10m_FS.nii -force -nthreads $ncpus
 
 
 #IFG – includes 45 (75), 47l (76)
 
-mrcat ${subjMaskDir}/L_45_ROI.nii.gz ${subjMaskDir}/L_47l_ROI.nii.gz ${OUTDIR}/HCP_LIFG_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/L_45_ROI.nii.gz ${subjMaskDir}/L_47l_ROI.nii.gz -max ${OUTDIR}/HCP_LIFG_FS.nii -force -nthreads $ncpus
 
-mrcat ${subjMaskDir}/R_45_ROI.nii.gz ${subjMaskDir}/R_47l_ROI.nii.gz ${OUTDIR}/HCP_RIFG_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/R_45_ROI.nii.gz ${subjMaskDir}/R_47l_ROI.nii.gz -max ${OUTDIR}/HCP_RIFG_FS.nii -force -nthreads $ncpus
 
