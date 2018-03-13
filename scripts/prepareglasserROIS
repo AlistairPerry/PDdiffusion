@@ -1,4 +1,3 @@
-
 #!/bin/bash
 #file : prepareglasserparcROIS
 #usage: prepareglasserparcROIS <subj> <WORKDIR>
