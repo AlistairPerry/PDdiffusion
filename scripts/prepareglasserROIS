@@ -33,3 +33,20 @@ mrcalc ${subjMaskDir}/L_45_ROI.nii.gz ${subjMaskDir}/L_47l_ROI.nii.gz -max ${OUT
 
 mrcalc ${subjMaskDir}/R_45_ROI.nii.gz ${subjMaskDir}/R_47l_ROI.nii.gz -max ${OUTDIR}/HCP_RIFG_FS.nii -force -nthreads $ncpus
 
+
+#OFC - includes OFC (93), pOFC (166)
+
+mrcalc ${subjMaskDir}/L_OFC_ROI.nii.gz  ${subjMaskDir}/L_pOFC_ROI.nii.gz -max ${OUTDIR}/HCP_LOFC_FS.nii -force -nthreads $ncpus
+
+mrcalc ${subjMaskDir}/R_OFC_ROI.nii.gz ${subjMaskDir}/R_pOFC_ROI.nii.gz -max ${OUTDIR}/HCP_ROFC_FS.nii -force -nthreads $ncpus
+
+
+#PreMotor - make Phil happy - includes yarda yarda
+
+fslmaths ${subjMaskDir}/L_FEF_ROI.nii.gz -add  ${subjMaskDir}/L_55b_ROI.nii.gz -add ${subjMaskDir}/L_6a_ROI.nii.gz -add ${subjMaskDir}/L_6d_ROI.nii.gz -add ${subjMaskDir}/L_6v_ROI.nii.gz -add ${subjMaskDir}/L_6r_ROI.nii.gz ${OUTDIR}/HCP_LPreMotor_FS.nii.gz
+
+fslmaths ${subjMaskDir}/R_FEF_ROI.nii.gz -add  ${subjMaskDir}/R_55b_ROI.nii.gz -add ${subjMaskDir}/R_6a_ROI.nii.gz -add ${subjMaskDir}/R_6d_ROI.nii.gz -add ${subjMaskDir}/R_6v_ROI.nii.gz -add ${subjMaskDir}/R_6r_ROI.nii.gz ${OUTDIR}/HCP_RPreMotor_FS.nii.gz
+
+gunzip ${OUTDIR}/HCP_LPreMotor_FS.nii.gz
+
+gunzip ${OUTDIR}/HCP_RPreMotor_FS.nii.gz
