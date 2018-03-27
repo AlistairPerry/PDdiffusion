@@ -15,21 +15,47 @@ cd ${OUTDIR}
 
 #SMA – includes 6ma (44), 6mp(55)
 
-mrcalc ${subjMaskDir}/L_6ma_ROI.nii.gz ${subjMaskDir}/L_6mp_ROI.nii.gz -max ${OUTDIR}/HCP_LSMA_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/L_6ma_ROI.nii.gz ${subjMaskDir}/L_6mp_ROI.nii.gz -max ${OUTDIR}/HCP_LSMA_FS.nii -force -nthreads 8
  
-mrcalc ${subjMaskDir}/R_6mp_ROI.nii.gz ${subjMaskDir}/R_6mp_ROI.nii.gz -max ${OUTDIR}/HCP_RSMA_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/R_6mp_ROI.nii.gz ${subjMaskDir}/R_6mp_ROI.nii.gz -max ${OUTDIR}/HCP_RSMA_FS.nii -force -nthreads 8
 
 
 #10medial – includes 10r (65), 10v (88)
 
-mrcalc ${subjMaskDir}/L_10r_ROI.nii.gz ${subjMaskDir}/L_10v_ROI.nii.gz -max ${OUTDIR}/HCP_L10m_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/L_10r_ROI.nii.gz ${subjMaskDir}/L_10v_ROI.nii.gz -max ${OUTDIR}/HCP_L10m_FS.nii -force -nthreads 8
 
-mrcalc ${subjMaskDir}/R_10r_ROI.nii.gz ${subjMaskDir}/R_10v_ROI.nii.gz -max ${OUTDIR}/HCP_R10m_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/R_10r_ROI.nii.gz ${subjMaskDir}/R_10v_ROI.nii.gz -max ${OUTDIR}/HCP_R10m_FS.nii -force -nthreads 8
 
 
 #IFG – includes 45 (75), 47l (76)
 
-mrcalc ${subjMaskDir}/L_45_ROI.nii.gz ${subjMaskDir}/L_47l_ROI.nii.gz -max ${OUTDIR}/HCP_LIFG_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/L_45_ROI.nii.gz ${subjMaskDir}/L_47l_ROI.nii.gz -max ${OUTDIR}/HCP_LIFG_FS.nii -force -nthreads 8
 
-mrcalc ${subjMaskDir}/R_45_ROI.nii.gz ${subjMaskDir}/R_47l_ROI.nii.gz -max ${OUTDIR}/HCP_RIFG_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/R_45_ROI.nii.gz ${subjMaskDir}/R_47l_ROI.nii.gz -max ${OUTDIR}/HCP_RIFG_FS.nii -force -nthreads 8
 
+
+#OFC - includes OFC (93), pOFC (166)
+
+mrcalc ${subjMaskDir}/L_OFC_ROI.nii.gz  ${subjMaskDir}/L_pOFC_ROI.nii.gz -max ${OUTDIR}/HCP_LOFC_FS.nii -force -nthreads 8
+
+mrcalc ${subjMaskDir}/R_OFC_ROI.nii.gz ${subjMaskDir}/R_pOFC_ROI.nii.gz -max ${OUTDIR}/HCP_ROFC_FS.nii -force -nthreads 8
+
+
+#PreMotor - make Phil happy - includes yarda yarda
+
+fslmaths ${subjMaskDir}/L_FEF_ROI.nii.gz -add  ${subjMaskDir}/L_55b_ROI.nii.gz -add ${subjMaskDir}/L_6a_ROI.nii.gz -add ${subjMaskDir}/L_6d_ROI.nii.gz -add ${subjMaskDir}/L_6v_ROI.nii.gz -add ${subjMaskDir}/L_6r_ROI.nii.gz ${OUTDIR}/HCP_LPreMotor_FS.nii.gz
+
+fslmaths ${subjMaskDir}/R_FEF_ROI.nii.gz -add  ${subjMaskDir}/R_55b_ROI.nii.gz -add ${subjMaskDir}/R_6a_ROI.nii.gz -add ${subjMaskDir}/R_6d_ROI.nii.gz -add ${subjMaskDir}/R_6v_ROI.nii.gz -add ${subjMaskDir}/R_6r_ROI.nii.gz ${OUTDIR}/HCP_RPreMotor_FS.nii.gz
+
+#Motor Cortex - is just one region
+
+mrconvert ${subjMaskDir}/L_4_ROI.nii.gz ${OUTDIR}/HCP_LMotor_FS.nii -force -nthreads 8 
+
+mrconvert ${subjMaskDir}/R_4_ROI.nii.gz ${OUTDIR}/HCP_RMotor_FS.nii -force -nthreads 8
+
+
+#unzip files
+
+gunzip ${OUTDIR}/HCP_LPreMotor_FS.nii.gz
+
+gunzip ${OUTDIR}/HCP_RPreMotor_FS.nii.gz
