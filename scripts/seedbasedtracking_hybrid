@@ -223,7 +223,8 @@ afdconnectivity ${WORKDIR}/${NORMDIR}/FODS/${subj}_wm.mif ${seed}_to_${target}.t
 
 #now reverse!
 
-tckgen ${WORKDIR}/${NORMDIR}/FODS/${subj}_wm.mif ${target}_to_${seed}.tck -seed_image ${target}_diff.nii -include ${seed}_diff.nii -mask ${WORKDIR}/${NORMDIR}/Masks/${subj}_Mask.nii -select 100 -maxlength 250 -stop -seed_unidirectional -force -nthreads 5 -output_seeds ${target}_seeds.txt
+tckgen ${WORKDIR}/${NORMDIR}/FODS/${subj}_wm.mif ${target}_to_${seed}.tck -seed_image ${target}_diff.nii -include ${seed}_diff.nii -mask ${WORKDIR}/${NORMDIR}/Masks/${subj}_Mask.nii -number 100 -maxlength 250 -stop -unidirectional -force -nthreads 5 -output_seeds ${target}_seeds.txt
+
 
 tckmap ${target}_to_${seed}.tck ${target}_to_${seed}_tdi.nii -template ${WORKDIR}/${NORMDIR}/DWInorm/${subj}_fa.nii -nthreads 5 -force #this is actually useful in looking at the track density
 
