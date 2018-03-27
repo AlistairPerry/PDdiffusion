@@ -44,26 +44,22 @@ bet2 brainFS.nii brainFSbet -f 0.2 -m
 
 gunzip brainFSbet.nii.gz
 
-#add nthreads for ANTs
 
-ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=$ncpus
-export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS
+#Setup transforms between FS, MNI, and Diff space
 
-#now run
+#standard flirt - registrationn for now (will change to ANTS)
 
-parcimageref=${parcimageref}.nii
+flirt -ref ${PARCDIR}/${parcimageref}.nii -in ${DATADIR}/${subj}/brainFS.nii -omat FS2MNI.mat -out FS2MNI -dof 12
 
-antsRegistration --verbose 1 --dimensionality 3 --float 0 --collapse-output-transforms 1 --output [brainFSintemp,brainFSintempWarped.nii.gz,brainFSintempInverseWarped.nii.gz] --interpolation Linear --use-histogram-matching 0 --winsorize-image-intensities [0.005,0.995] --initial-moving-transform [${PARCDIR}/${parcimageref},brainFSbet.nii,1] --transform Rigid[0.1] --metric MI[${PARCDIR}/${parcimageref},brainFSbet.nii,1,32,Regular,0.25] --convergence [1000x500x250x100,1e-6,10] --shrink-factors 8x4x2x1 --smoothing-sigmas 3x2x1x0vox --transform Affine[0.1] --metric MI[${PARCDIR}/${parcimageref},brainFSbet.nii,1,32,Regular,0.25] --convergence [1000x500x250x100,1e-6,10] --shrink-factors 8x4x2x1 --smoothing-sigmas 3x2x1x0vox --transform SyN[0.1,3,0] --metric CC[${PARCDIR}/${parcimageref},brainFSbet.nii,1,4] --convergence [100x70x50x20,1e-6,10] --shrink-factors 8x4x2x1 --smoothing-sigmas 3x2x1x0vox
+fnirt --in=${DATADIR}/${subj}/brainFS.nii --aff=FS2MNI.mat --cout=FS_nonlinear_transf_2MNI --config=T1_2_MNI152_2mm
 
+#redundant - but good for QC purposes
+applywarp --ref=${PARCDIR}/${parcimageref}.nii --in=${DATADIR}/${subj}/brainFS.nii --warp=FS_nonlinear_transf_2MNI --out=FS_nonlinear_warped_2MNI
+
+#setup inverse for ROI masks
+
+invwarp --ref=${DATADIR}/${subj}/brainFS.nii --warp=FS_nonlinear_transf_2MNI --out=FS_nonlinear_transf_2MNI_INV
 #flirt -ref ${PARCDIR}/mni_hires_t1_brain.nii -in ${DATADIR}/${subj}/preproc/brainFS.nii -omat FS2MNIhires.mat -out FS2MNIhiris -dof 12
-
-#convert_xfm -omat tempinbrainFS.mat -inverse FS2MNIhires.mat
-
-c3d_affine_tool -ref brainFSintempWarped.nii.gz -src brainFSbet.nii -itk brainFSintemp0GenericAffine.mat -ras2fsl -o brainFSintemp-fsl.mat
-
-#now inverse it
-
-convert_xfm -omat tempinbrainFS.mat -inverse brainFSintemp-fsl.mat
 
 convert_xfm -omat FS2diff.mat -inverse ${DATADIR}/${subj}/preproc/diff2FS.mat
 
@@ -74,17 +70,17 @@ do
 seed=$(echo $line | cut -d " " -f 1) 
 target=$(echo $line | cut -d " " -f 2)
 
-echo "tracking for $seed to $target" #may do reverse later
+echo "tracking for $seed to $target" 
 
-#Setup seeds in diffusion space.. for now
+#Setup seeds in diffusion space.. 
 
-flirt -in ${PARCDIR}/${seed}.nii -ref ${DATADIR}/${subj}/preproc/brainFS.nii -applyxfm -init tempinbrainFS.mat -interp nearestneighbour -out ${seed}_FS.nii.gz
+applywarp --ref=${DATADIR}/${subj}/brainFS.nii --in=${PARCDIR}/${seed}.nii --warp=FS_nonlinear_transf_2MNI_INV --out=${seed}_FS --interp=nn
 
 gunzip ${seed}_FS.nii.gz -f
 
-mrconvert ${seed}_FS.nii ${seed}_FS_str.nii -stride -1,3,-2 -force -nthreads $ncpus
+mrconvert ${seed}_FS.nii ${seed}_FS_str.nii -stride -1,3,-2 -force -nthreads 5
 
-flirt -in ${seed}_FS_str.nii -ref ${DATADIR}/${subj}/preproc/biasmeanb0bet.nii.gz -out ${seed}_diff.nii.gz -applyxfm -init FS2diff.mat -interp nearestneighbour
+flirt -in ${seed}_FS_str.nii -ref ${DATADIR}/${subj}/fa.nii -out ${seed}_diff.nii.gz -applyxfm -init  ${DATADIR}/${subj}/FS2diff.mat -interp nearestneighbour
 
 gunzip ${seed}_diff.nii.gz -f
 
@@ -109,6 +105,7 @@ gunzip ${seed}_diff.nii.gz -f
 #gunzip ${target}_FS.nii.gz -f
  
 #mrconvert ${target}_FS.nii ${target}_FS_str.nii -stride -1,3,-2 -force -nthreads $ncpus
+
 
 rsync ${indivparcdir}/${target}_FS.nii .
  
