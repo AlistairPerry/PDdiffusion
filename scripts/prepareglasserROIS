@@ -34,6 +34,20 @@ mrcalc ${subjMaskDir}/L_45_ROI.nii.gz ${subjMaskDir}/L_47l_ROI.nii.gz -max ${OUT
 mrcalc ${subjMaskDir}/R_45_ROI.nii.gz ${subjMaskDir}/R_47l_ROI.nii.gz -max ${OUTDIR}/HCP_RIFG_FS.nii -force -nthreads $ncpus
 
 
+#IFGant – includes 45 (75), 47l (76)
+
+mrcalc ${subjMaskDir}/L_47l_ROI.nii.gz ${subjMaskDir}/L_a47r_ROI.nii.gz -max ${OUTDIR}/HCP_LIFGant_FS.nii -force -nthreads $ncpus
+
+mrcalc ${subjMaskDir}/R_47l_ROI.nii.gz ${subjMaskDir}/R_a47r_ROI.nii.gz -max ${OUTDIR}/HCP_RIFGant_FS.nii -force -nthreads $ncpus
+
+
+#ACC
+
+mrcalc ${subjMaskDir}/L_a24_ROI.nii.gz ${subjMaskDir}/L_p24_ROI.nii.gz -max ${OUTDIR}/HCP_ACC_FS.nii -force -nthreads $ncpus
+
+mrcalc ${subjMaskDir}/R_a24_ROI.nii.gz ${subjMaskDir}/R_p24_ROI.nii.gz -max ${OUTDIR}/HCP_ACC_FS.nii -force -nthreads $ncpus
+
+
 #OFC - includes OFC (93), pOFC (166)
 
 mrcalc ${subjMaskDir}/L_OFC_ROI.nii.gz  ${subjMaskDir}/L_pOFC_ROI.nii.gz -max ${OUTDIR}/HCP_LOFC_FS.nii -force -nthreads $ncpus
