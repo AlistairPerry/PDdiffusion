@@ -43,9 +43,9 @@ mrcalc ${subjMaskDir}/R_47l_ROI.nii.gz ${subjMaskDir}/R_a47r_ROI.nii.gz -max ${O
 
 #ACC
 
-mrcalc ${subjMaskDir}/L_a24_ROI.nii.gz ${subjMaskDir}/L_p24_ROI.nii.gz -max ${OUTDIR}/HCP_ACC_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/L_a24_ROI.nii.gz ${subjMaskDir}/L_p24_ROI.nii.gz -max ${OUTDIR}/HCP_LACC_FS.nii -force -nthreads $ncpus
 
-mrcalc ${subjMaskDir}/R_a24_ROI.nii.gz ${subjMaskDir}/R_p24_ROI.nii.gz -max ${OUTDIR}/HCP_ACC_FS.nii -force -nthreads $ncpus
+mrcalc ${subjMaskDir}/R_a24_ROI.nii.gz ${subjMaskDir}/R_p24_ROI.nii.gz -max ${OUTDIR}/HCP_RACC_FS.nii -force -nthreads $ncpus
 
 
 #OFC - includes OFC (93), pOFC (166)
@@ -61,6 +61,6 @@ fslmaths ${subjMaskDir}/L_FEF_ROI.nii.gz -add  ${subjMaskDir}/L_55b_ROI.nii.gz -
 
 fslmaths ${subjMaskDir}/R_FEF_ROI.nii.gz -add  ${subjMaskDir}/R_55b_ROI.nii.gz -add ${subjMaskDir}/R_6a_ROI.nii.gz -add ${subjMaskDir}/R_6d_ROI.nii.gz -add ${subjMaskDir}/R_6v_ROI.nii.gz -add ${subjMaskDir}/R_6r_ROI.nii.gz ${OUTDIR}/HCP_RPreMotor_FS.nii.gz
 
-gunzip ${OUTDIR}/HCP_LPreMotor_FS.nii.gz
+gunzip -f ${OUTDIR}/HCP_LPreMotor_FS.nii.gz
 
-gunzip ${OUTDIR}/HCP_RPreMotor_FS.nii.gz
+gunzip -f ${OUTDIR}/HCP_RPreMotor_FS.nii.gz
