@@ -8,7 +8,7 @@
 source /daten/bin/setup_fsl-5.0.9-cscor.sh
 source /beegfs/v1/bin2/setup_freesurfer_530.sh
 
-MRTRIX=/beegfs/scratch/tnc_scratch/aperry/MRtrix/02032017
+MRTRIX=/beegfs/scratch/tnc_scratch/aperry/MRtrix/RC3
 export PATH=${MRTRIX}/release/bin:${MRTRIX}/scripts:$PATH
 
 export OMP_NUM_THREADS=8
