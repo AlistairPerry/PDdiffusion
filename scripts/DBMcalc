@@ -36,11 +36,11 @@ fslmaths brainFS_absJAc.nii.gz -s 8 brainFS_absJAc_8mm_fwhm.nii.gz
 
 #Disease calculation 
 
-mrstats mean brainFS_absJAc_2mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz > ${sub}_DBM_dis_mean_2mm.txt
+mrstats mean brainFS_absJAc_2mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz > ${subj}_DBM_dis_mean_2mm.txt
 
-mrstats mean brainFS_absJAc_8mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz > ${sub}_DBM_dis_mean_8mm.txt
+mrstats mean brainFS_absJAc_8mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz > ${subj}_DBM_dis_mean_8mm.txt
 
 
-mrstats median brainFS_absJAc_2mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz >  ${sub}_DBM_dis_med_2mm.txt
+mrstats median brainFS_absJAc_2mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz >  ${subj}_DBM_dis_med_2mm.txt
 
-mrstats median brainFS_absJAc_8mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz >  ${sub}_DBM_dis_med_2mm.txt
+mrstats median brainFS_absJAc_8mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz >  ${subj}_DBM_dis_med_8mm.txt
