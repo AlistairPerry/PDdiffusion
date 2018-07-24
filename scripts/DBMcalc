@@ -9,14 +9,15 @@ SUBJECTS_DIR=${WORKDIR}/${OUTDIR}/FS
 mkdir -p ${SUBJECTS_DIR}
 
 mkdir -p ${WORKDIR}/${OUTDIR}/subjs/${subj}
-cd ${WORKDIR}/${OUTDIR}/subjs/${subj}
 
 #set ANTs resources
 
 ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=$ncpus
 export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS
 
-DenoiseImage -d 3 -i T1.nii -o T1_dn.nii.gz
+DenoiseImage -d 3 -i T1.nii -o ${WORKDIR}/${OUTDIR}/subjs/${subj}/T1_dn.nii.gz
+
+cd ${WORKDIR}/${OUTDIR}/subjs/${subj}
 
 recon-all -autorecon1 -i T1_dn.nii.gz -subjid $subj -sd $SUBJECTS_DIR -no-isrunning -mprage
 
