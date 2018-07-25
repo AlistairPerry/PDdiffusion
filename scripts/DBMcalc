@@ -19,7 +19,7 @@ DenoiseImage -d 3 -i T1.nii -o ${WORKDIR}/${OUTDIR}/subjs/${subj}/T1_dn.nii.gz
 
 cd ${WORKDIR}/${OUTDIR}/subjs/${subj}
 
-recon-all -autorecon1 -i T1_dn.nii.gz -subjid $subj -sd $SUBJECTS_DIR -no-isrunning -mprage
+recon-all -autorecon1 -autorecon2 -i T1_dn.nii.gz -subjid $subj -sd $SUBJECTS_DIR -no-isrunning -mprage
 
 mri_vol2vol --mov $SUBJECTS_DIR/$subj/mri/brain.mgz --targ $SUBJECTS_DIR/$subj/mri/rawavg.mgz --regheader --o brainFSnat.nii
 
@@ -37,11 +37,13 @@ fslmaths brainFS_absJAc.nii.gz -s 8 brainFS_absJAc_8mm_fwhm.nii.gz
 
 #Disease calculation 
 
-mrstats mean brainFS_absJAc_2mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz > ${subj}_DBM_dis_mean_2mm.txt
+rm *mm.txt
 
-mrstats mean brainFS_absJAc_8mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz > ${subj}_DBM_dis_mean_8mm.txt
+mrstats -output mean brainFS_absJAc_2mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz > ${subj}_DBM_dis_mean_2mm.txt
+
+mrstats -output mean brainFS_absJAc_8mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz > ${subj}_DBM_dis_mean_8mm.txt
 
 
-mrstats median brainFS_absJAc_2mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz >  ${subj}_DBM_dis_med_2mm.txt
+mrstats -output median brainFS_absJAc_2mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz >  ${subj}_DBM_dis_med_2mm.txt
 
-mrstats median brainFS_absJAc_8mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz >  ${subj}_DBM_dis_med_8mm.txt
+mrstats -output median brainFS_absJAc_8mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3.nii.gz >  ${subj}_DBM_dis_med_8mm.txt
