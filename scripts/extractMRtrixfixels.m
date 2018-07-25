@@ -1,4 +1,4 @@
-function [allsubjfixels] = extractMRtrixfixels(fodtemplatebase, outdir)
+function [allsubjfixels, allsubjfixels_reshapelong] = extractMRtrixfixels(fodtemplatebase, outdir)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -20,6 +20,8 @@ indfixelrow=find(strcmp({subjfixelfiles.name}, 'index.mif')==1);
 catremrows=cat(1,dirfixelrow,indfixelrow);
 subjfixelfiles(catremrows,:)=[];
 
+fodtempdim=size(); %tofinish
+
 mkdir(outdir);
 
 for i = 1:length(subjfixelfiles(:,1))
@@ -34,7 +36,15 @@ for i = 1:length(subjfixelfiles(:,1))
         subjfixeldata_reshape(fixelindexdata==j)=subjfixelmeta.data(j,1);
     end
     
+    subjfixeldata_reshapelong=reshape(subjfixeldata_reshape,[1, fodtempdim(1,1)*fodtempdim(1,2)*fodtempdim(1,3));
     allsubjfixels(:,:,:,i)=subjfixeldata_reshape;
+    allsubjfixels_reshapelong(i,:)=subjfixeldata_reshapelong;
+    
+    %remove empty columns
+    maxcol=max(allsubjfixels_reshapelong);
+    emptycol=find(maxcol==0);
+    allsubjfixels_remzeros=allsubjfixels_reshapelong;
+    allsubjfixels_remzeros(:,emptycol)=[];
     
     subjoutfixelnii=[];
     subjoutfixelnii=fodbasemeta;
