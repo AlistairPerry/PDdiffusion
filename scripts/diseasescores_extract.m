@@ -23,10 +23,16 @@ for s = 1:length(subFolders)
     
     subjdismed8mm=dlmread([currentSubjDir '/' currentSubj '' '_DBM_dis_med_8mm.txt']); %Matrix file containing information of each subject
     dismed8mm(s,1) = subjdismed8mm; %Matlab field representing connectivity matrix
+    
+    subjdismean2mmgm=dlmread([currentSubjDir '/' currentSubj '' '_DBM_dis_mean_2mm_gm.txt']); %Matrix file containing information of each subject
+    dismean2mmgm(s,1) = subjdismean2mmgm; %Matlab field representing connectivity matrix
+
+    subjdismed2mmgm=dlmread([currentSubjDir '/' currentSubj '' '_DBM_dis_med_2mm_gm.txt']); %Matrix file containing information of each subject
+    dismed2mmgm(s,1) = subjdismed2mmgm; %Matlab field representing connectivity matrix
 
 end
 
-diseasescores=table(dismean2mm, dismean8mm, dismed2mm, dismed8mm);
+diseasescores=table(dismean2mm, dismean8mm, dismed2mm, dismed8mm, dismean2mmgm, dismed2mmgm);
 %diseasescores.Properties.VariableNames{'subFolders.name'} = 'Patient';
 
 end
