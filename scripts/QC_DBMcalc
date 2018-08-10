@@ -3,7 +3,7 @@ subj=$1
 WORKDIR=$2
 OUTDIR=$3
 
-DATADIR=${WORKDIR}/DBM_PD25/${subj}
+DATADIR=${WORKDIR}/DBM_PD25/subjs/${subj}
 
 mkdir -p ${WORKDIR}/DBM_PD25/${OUTDIR}/DBM
 mkdir -p ${WORKDIR}/DBM_PD25/${OUTDIR}/Brain
