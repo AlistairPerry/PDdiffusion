@@ -14,18 +14,18 @@ cd ${DATADIR}
 #DBM Jac
 
 slicer brainFS_absJAc.nii.gz -a Jac_sliced.ppm
-convert Jac_sliced.ppm ${WORKDIR}/${OUTDIR}/DBM/${subj}_Jac.png
+convert Jac_sliced.ppm ${WORKDIR}/DBM_PD25/${OUTDIR}/DBM/${subj}_Jac.png
 
 #Brain
 
 slicer  brainFSnat.nii -a Brain_sliced.ppm
-convert Brain_sliced.ppm ${WORKDIR}/${OUTDIR}/Brain/${subj}_brain.png
+convert Brain_sliced.ppm ${WORKDIR}/DBM_PD25/${OUTDIR}/Brain/${subj}_brain.png
 
 #Reg
 
 overlay 0 0 /mnt/backedup/home/alistaiP/base/PD25/PD25-T1MPRAGE-template-1mm-brain.nii.gz -A brainFS_inPD25Warped.nii.gz 75 200 Brain_overlay.nii.gz
 slicer Brain_overlay.nii.gz -a Brainoverlay_sliced.ppm
-convert Brainoverlay_sliced.ppm ${WORKDIR}/${OUTDIR}/Reg/${subj}_Brainoverlay.png 
+convert Brainoverlay_sliced.ppm ${WORKDIR}/DBM_PD25/${OUTDIR}/Reg/${subj}_Brainoverlay.png 
 rm Brain_overlay.nii.gz
 
 rm *.ppm
