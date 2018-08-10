@@ -5,9 +5,9 @@ OUTDIR=$3
 
 DATADIR=${WORKDIR}/DBM_PD25/${subj}
 
-mkdir -p ${WORKDIR}/${OUTDIR}/DBM
-mkdir -p ${WORKDIR}/${OUTDIR}/Brain
-mkdir -p ${WORKDIR}/${OUTDIR}/Reg
+mkdir -p ${WORKDIR}/DBM_PD25/${OUTDIR}/DBM
+mkdir -p ${WORKDIR}/DBM_PD25/${OUTDIR}/Brain
+mkdir -p ${WORKDIR}/DBM_PD25/${OUTDIR}/Reg
 
 cd ${DATADIR}
 
