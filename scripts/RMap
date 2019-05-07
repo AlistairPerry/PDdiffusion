@@ -79,3 +79,8 @@ tcktransform tck2brainFS.tck tck2MNI-corr.mif VAT_MNI.tck -nthreads $ncpus -forc
 #Convert to a .nii file
 
 tckmap VAT_MNI.tck VAT_MNI.nii -tck_weights_in VATnosift.txt -stat_vox sum -template ${WORKDIR}/${PARCDIR}/2009c_brain.nii -force
+
+
+#Gzip tck file for later use (if need be)
+
+gzip ${DATADIR}/${subj}/preproc/25M.tck
