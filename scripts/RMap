@@ -1,0 +1,81 @@
+#!/bin/bash
+#usage: RMap subj WORKDIR NORMDIR PARCDIR OUTDIR
+
+#compulsory arguments that are called automatically:
+subj=$1
+WORKDIR=$2
+NORMDIR=$3
+PARCDIR=$4
+OUTDIR=$5
+
+
+#option to include extra  argument ($7), if diffusion data directory has changed
+#e.g: if files are now located in "Diff-wcust5tt"
+#usage: seedbasedtracking $subj $WORKDIR $NORMDIR Diff-wcust5tt
+
+nargs=$#
+
+if [ "$nargs" == 5 ]; then
+	DATADIR=${WORKDIR}/Diff
+else
+	DATADIR=${WORKDIR}/$6
+fi
+
+
+#Create and setup output directory
+
+mkdir -p ${WORKDIR}/${OUTDIR}/${subj}/
+
+cd ${WORKDIR}/${OUTDIR}/${subj}/
+
+
+#Move in the simulated volume of activated tissue in diff space for each patient
+
+rsync -vaz ${WORKDIR}/${NORMDIR}/seedtracking-ANTs/${subj}/rrLEAD_DBS_VAT_LEFT_diff.nii .
+
+rsync -vaz ${WORKDIR}/${NORMDIR}/seedtracking-ANTs/${subj}/rrLEAD_DBS_VAT_RIGHT_diff.nii .
+
+
+#Gunzip tck file - will leave it in orig directory for computation purposes
+
+gunzip ${DATADIR}/${subj}/preproc/25M.tck.gz 
+
+
+#Join the VATs together to make a bi-hemispheric seed
+
+fslmaths rrLEAD_DBS_VAT_LEFT_diff.nii -add rrLEAD_DBS_VAT_RIGHT_diff.nii Bilateral_VAT_diff.nii
+
+gunzip Bilateral_VAT_diff.nii.gz 
+
+
+#Select streamlines passing through the bi-hemispheric seed
+
+tckedit ${DATADIR}/${subj}/preproc/25M.tck -tck_weights_out VATnosift.txt -include Bilateral_VAT_diff.nii VAT.tck -maxlength 250 -number 10000 -force -nthreads $ncpus
+
+
+#Move the .tck file into MNI nlin 2009c space
+
+#Setup warp files
+
+warpinit ${WORKDIR}/${PARCDIR}/2009c_brain.nii 2009c_brain-[].nii -nthreads $ncpus -force
+
+warpinit ${WORKDIR}/${NORMDIR}/seedtracking-ANTs/${subj}/brainFSspbet.nii brainFS-[].nii -nthreads $ncpus -force
+
+mrtransform brainFS-[].nii -linear ${DATADIR}/${subj}/preproc/diff2FSMR.mat tck2brainFS.mif -nthreads $ncpus -force
+
+
+for i in 0 1 2; do WarpImageMultiTransform 3 2009c_brain-${i}.nii tck2MNI-${i}.nii -R ${WORKDIR}/${PARCDIR}/2009c_brain.nii -i ${WORKDIR}/${NORMDIR}/seedtracking-ANTs/${subj}/brainFSintemp0GenericAffine.mat ${WORKDIR}/${NORMDIR}/seedtracking-ANTs/${subj}/brainFSintemp1InverseWarp.nii.gz; done
+
+warpcorrect tck2MNI-[].nii tck2MNI-corr.mif -nthreads $ncpus -force
+
+
+#Move .tck file from diffusion to anatomical and then MNI space
+
+tcktransform VAT.tck tck2brainFS.mif tck2brainFS.tck -nthreads $ncpus -force
+
+tcktransform tck2brainFS.tck tck2MNI-corr.mif VAT_MNI.tck -nthreads $ncpus -force
+
+
+#Convert to a .nii file
+
+tckmap VAT_MNI.tck VAT_MNI.nii -tck_weights_in VATnosift.txt -stat_vox sum -template ${WORKDIR}/${PARCDIR}/2009c_brain.nii -force
