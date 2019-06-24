@@ -4,21 +4,27 @@
 subj=$1
 WORKDIR=$2
 OUTDIR=$3
+TEMPbrain=$4
+PDmask=$5
 
-SUBJECTS_DIR=${WORKDIR}/${OUTDIR}/FS
+SUBJECTS_DIR=${WORKDIR}/FS
 
 #set ANTs resources
 
 ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=$ncpus
 export ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS
-	
+
+
+mkdir -p ${WORKDIR}/${OUTDIR}/subjs/${subj}
+		
 cd ${WORKDIR}/${OUTDIR}/subjs/${subj}
 
 mri_vol2vol --mov $SUBJECTS_DIR/$subj/mri/brain.mgz --targ $SUBJECTS_DIR/$subj/mri/rawavg.mgz --regheader --o brainFSnat.nii
 
-antsRegistration --verbose 1 --dimensionality 3 --float 0 --collapse-output-transforms 1 --output [brainFS_inPD25, brainFS_inPD25Warped.nii.gz, brainFS_inPD25InverseWarped.nii.gz] --interpolation Linear --use-histogram-matching 1 --winsorize-image-intensities [0.005,0.995] --initial-moving-transform [/mnt/backedup/home/alistaiP/base/PD25/PD25-T1MPRAGE-template-1mm-brain.nii.gz, brainFSnat.nii,1] --transform Rigid[0.1] --metric MI[/mnt/backedup/home/alistaiP/base/PD25/PD25-T1MPRAGE-template-1mm-brain.nii.gz, brainFSnat.nii,1,32,Regular,0.25] --convergence [1000x500x250x100,1e-6,10] --shrink-factors 8x4x2x1 --smoothing-sigmas 3x2x1x0vox --transform Affine[0.1] --metric MI[/mnt/backedup/home/alistaiP/base/PD25/PD25-T1MPRAGE-template-1mm-brain.nii.gz, brainFSnat.nii,1,32,Regular,0.25] --convergence [1000x500x250x100,1e-6,10] --shrink-factors 8x4x2x1 --smoothing-sigmas 3x2x1x0vox --transform SyN[0.1,3,0] --metric CC[/mnt/backedup/home/alistaiP/base/PD25/PD25-T1MPRAGE-template-1mm-brain.nii.gz, brainFSnat.nii,1,4] --convergence [100x70x50x20,1e-6,10] --shrink-factors 8x4x2x1 --smoothing-sigmas 3x2x1x0vox
+antsRegistration --verbose 1 --dimensionality 3 --float 0 --collapse-output-transforms 1 --output [brainFS_inPD25, brainFS_inPD25Warped.nii.gz, brainFS_inPD25InverseWarped.nii.gz] --interpolation Linear --use-histogram-matching 1 --winsorize-image-intensities [0.005,0.995] --initial-moving-transform [${TEMPbrain}, brainFSnat.nii,1] --transform Rigid[0.1] --metric MI[${TEMPbrain}, brainFSnat.nii,1,32,Regular,0.25] --convergence [1000x500x250x100,1e-6,10] --shrink-factors 8x4x2x1 --smoothing-sigmas 3x2x1x0vox --transform Affine[0.1] --metric MI[${TEMPbrain}, brainFSnat.nii,1,32,Regular,0.25] --convergence [1000x500x250x100,1e-6,10] --shrink-factors 8x4x2x1 --smoothing-sigmas 3x2x1x0vox --transform SyN[0.1,3,0] --metric CC[${TEMPbrain}, brainFSnat.nii,1,4] --convergence [100x70x50x20,1e-6,10] --shrink-factors 8x4x2x1 --smoothing-sigmas 3x2x1x0vox
 
 CreateJacobianDeterminantImage 3 brainFS_inPD251Warp.nii.gz brainFS_absJAc.nii.gz 1
+
 
 #smoothing
 
@@ -31,11 +37,11 @@ fslmaths brainFS_absJAc.nii.gz -s 8 brainFS_absJAc_8mm_fwhm.nii.gz
 
 rm *mm.txt
 
-mrstats -output mean brainFS_absJAc_2mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3_1mm.nii.gz > ${subj}_DBM_dis_mean_2mm.txt
+mrstats -output mean brainFS_absJAc_2mm_fwhm.nii.gz -mask ${PDmask} > ${subj}_DBM_dis_mean_2mm.txt
 
-mrstats -output mean brainFS_absJAc_8mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3_1mm.nii.gz > ${subj}_DBM_dis_mean_8mm.txt
+mrstats -output mean brainFS_absJAc_8mm_fwhm.nii.gz -mask ${PDmask} > ${subj}_DBM_dis_mean_2mm.txt > ${subj}_DBM_dis_mean_8mm.txt
 
 
-mrstats -output median brainFS_absJAc_2mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3_1mm.nii.gz >  ${subj}_DBM_dis_med_2mm.txt
+mrstats -output median brainFS_absJAc_2mm_fwhm.nii.gz -mask ${PDmask} > ${subj}_DBM_dis_mean_2mm.txt >  ${subj}_DBM_dis_med_2mm.txt
 
-mrstats -output median brainFS_absJAc_8mm_fwhm.nii.gz -mask /mnt/backedup/home/alistaiP/bundle/test/PDdiffusion/misc/melodic_IC_0007_thr3_1mm.nii.gz >  ${subj}_DBM_dis_med_8mm.txt
+mrstats -output median brainFS_absJAc_8mm_fwhm.nii.gz -mask ${PDmask} > ${subj}_DBM_dis_mean_2mm.txt >  ${subj}_DBM_dis_med_8mm.txt
