@@ -35,5 +35,7 @@ end
 diseasescores=table(subFolders.name, dismean, dismed, dismean2mm, dismean8mm, dismed2mm, dismed8mm);
 diseasescores.Properties.VariableNames{'subFolders.name'} = 'Patient';
 
+end
+
 
 
