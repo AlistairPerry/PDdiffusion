@@ -37,11 +37,11 @@ fslmaths brainFS_absJAc.nii.gz -s 8 brainFS_absJAc_8mm_fwhm.nii.gz
 
 rm *mm.txt
 
-mrstats -output mean brainFS_absJAc_2mm_fwhm.nii.gz -mask ${PDmask} > ${subj}_DBM_dis_mean_2mm.txt
+mrstats -output mean brainFS_absJAc_2mm_fwhm.nii.gz -mask ${PDmask} > ${subj}_DBM_dis_mean_2mm.txt > ${subj}_DBM_dis_mean_2mm.txt
 
-mrstats -output mean brainFS_absJAc_8mm_fwhm.nii.gz -mask ${PDmask} > ${subj}_DBM_dis_mean_2mm.txt > ${subj}_DBM_dis_mean_8mm.txt
+mrstats -output mean brainFS_absJAc_8mm_fwhm.nii.gz -mask ${PDmask} > ${subj}_DBM_dis_mean_8mm.txt > ${subj}_DBM_dis_mean_8mm.txt
 
 
-mrstats -output median brainFS_absJAc_2mm_fwhm.nii.gz -mask ${PDmask} > ${subj}_DBM_dis_mean_2mm.txt >  ${subj}_DBM_dis_med_2mm.txt
+mrstats -output median brainFS_absJAc_2mm_fwhm.nii.gz -mask ${PDmask} > ${subj}_DBM_dis_med_2mm.txt >  ${subj}_DBM_dis_med_2mm.txt
 
-mrstats -output median brainFS_absJAc_8mm_fwhm.nii.gz -mask ${PDmask} > ${subj}_DBM_dis_mean_2mm.txt >  ${subj}_DBM_dis_med_8mm.txt
+mrstats -output median brainFS_absJAc_8mm_fwhm.nii.gz -mask ${PDmask} > ${subj}_DBM_dis_med_2mm.txt >  ${subj}_DBM_dis_med_8mm.txt
